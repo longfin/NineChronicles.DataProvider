@@ -79,7 +79,6 @@
             var nineChroniclesProperties = new NineChroniclesNodeServiceProperties()
             {
                MinerPrivateKey = null,
-               Rpc = null,
                Libplanet = properties,
             };
 
@@ -88,26 +87,16 @@
                 properties.LogActionRenders = true;
             }
 
-            NineChroniclesNodeService nineChroniclesNodeService =
-                StandaloneServices.CreateHeadless(
-                    nineChroniclesProperties,
-                    context,
-                    blockInterval: headlessConfig.BlockInterval,
-                    reorgInterval: headlessConfig.ReorgInterval,
-                    authorizedMiner: headlessConfig.AuthorizedMiner,
-                    txLifeTime: TimeSpan.FromMinutes(headlessConfig.TxLifeTime));
-
             // ConfigureServices must come before Configure for now
             hostBuilder = hostBuilder
+                .UseNineChroniclesNode(nineChroniclesProperties, context)
                 .ConfigureServices((ctx, services) =>
                 {
                     services.AddHostedService<RenderSubscriber>();
-                    services.AddSingleton(nineChroniclesNodeService);
                     services.AddSingleton<MySqlStore>();
+                    services.AddSingleton(_ => context);
                     services.Configure<Configuration>(config);
                 });
-            hostBuilder =
-                   nineChroniclesNodeService.Configure(hostBuilder);
 
             await hostBuilder.RunConsoleAsync(token);
         }
