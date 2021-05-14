@@ -9,9 +9,6 @@
         public NineChroniclesSummaryQuery(MySqlStore store)
         {
             Store = store;
-            Field<StringGraphType>(
-                name: "test",
-                resolve: context => "Should be done.");
             Field<ListGraphType<HackAndSlashType>>(
                 name: "HackAndSlashQuery",
                 arguments: new QueryArguments(
