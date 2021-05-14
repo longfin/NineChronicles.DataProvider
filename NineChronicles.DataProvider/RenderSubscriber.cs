@@ -18,14 +18,14 @@ namespace NineChronicles.DataProvider
         private readonly NodeStatusRenderer _nodeStatusRenderer;
 
         public RenderSubscriber(
-            NineChroniclesNodeService nodeService,
+            StandaloneContext context,
             MySqlStore mySqlStore
         )
         {
-            _blockRenderer = nodeService.BlockRenderer;
-            _actionRenderer = nodeService.ActionRenderer;
-            _exceptionRenderer = nodeService.ExceptionRenderer;
-            _nodeStatusRenderer = nodeService.NodeStatusRenderer;
+            _blockRenderer = context.NineChroniclesNodeService!.BlockRenderer;
+            _actionRenderer = context.NineChroniclesNodeService!.ActionRenderer;
+            _exceptionRenderer = context.NineChroniclesNodeService!.ExceptionRenderer;
+            _nodeStatusRenderer = context.NineChroniclesNodeService!.NodeStatusRenderer;
             MySqlStore = mySqlStore;
         }
 
